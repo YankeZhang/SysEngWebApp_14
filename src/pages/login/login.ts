@@ -1,10 +1,8 @@
 import { Component,ViewChild } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, NavParams } from 'ionic-angular';
+import { AngularFireDatabase } from 'angularfire2/database';
 import { AlertController } from 'ionic-angular';
-import { AngularFireAuth } from '@angular/fire/auth';
-import { AngularFireDatabase } from '@angular/fire/database';
-import { TabsPage } from '../tabs/tabs';
-
+import { HomePage } from '../home/home'
 /**
  * Generated class for the LoginPage page.
  *
@@ -17,30 +15,54 @@ import { TabsPage } from '../tabs/tabs';
   templateUrl: 'login.html'
 })
 export class LoginPage {
-	currentUser = null;
+  Tuname;
+  Tpassword;
+  statusMessage: string;
   @ViewChild('username') uname;
   @ViewChild('password') password;
-  constructor(public firedb:AngularFireDatabase,public fire:AngularFireAuth,public navCtrl: NavController,public alertCtrl: AlertController) {
-
+  constructor(public navCtrl: NavController, public navParams: NavParams, public firedb: AngularFireDatabase, public alertCtrl: AlertController) {
+    
   }
 
   signIn()
   {
-    console.log(this.uname.value, this.password.value);
-    this.fire.auth.signInWithEmailAndPassword(this.uname.value,this.password.value).then(data =>{
-      this.currentUser=this.uname;
-      this.navCtrl.push(TabsPage);
-    })
-    .catch( error =>
+    this.firedb.list("/Admin/username").valueChanges().subscribe(
+      data =>
       {
-        const wronginfoalert = this.alertCtrl.create({
-      		title: 'Login fail!',
-      		subTitle: 'You entered wrong username or password, try again!',
-      		buttons: ['OK']
-    	});
-      wronginfoalert.present();
+        this.Tuname=data[0];
+        if(this.uname.value==data[0])
+        {
+          
+        }
+        else{
+          this.presentAlert();
+          return;
+        }
+      }
+    )
+    this.firedb.list("/Admin/password").valueChanges().subscribe(
+      _data =>
+      {
+        if(this.password.value==_data[0])
+        {
+          this.navCtrl.push(HomePage);
+          return;
+        }
+        else
+        {
+          this.presentAlert();
+          return;
+        }
       }
     )
   }
 
+  async presentAlert() {
+    const alert = await this.alertCtrl.create({
+      title: 'Login fail!',
+      subTitle: 'You entered wrong username or password, try again!',
+      buttons: ['OK']
+    });
+    await alert.present();
+  }
 }

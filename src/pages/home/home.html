@@ -3,26 +3,61 @@
       <ion-title>
         Home
       </ion-title>
-      <ion-buttons end>
-          <button ion-button color="danger" clear (click)="signOut()">
-            Log out
-          </button>
-        </ion-buttons>
     </ion-navbar>
 
   </ion-header>
+
+  
+
 <ion-content padding>
-    <ion-toolbar>
+  <ion-item>
+    <ion-label>Select user</ion-label>
+    <select-searchable item-content 
+    [(ngModel)]="currentuser"
+    [items] ="usernames" 
+    itemTextField="username"
+    [canSearch]="true" 
+    (onChange)="userChanged($event)">
+  </select-searchable>
+  </ion-item>
+    <!-- <ion-toolbar>
         <ion-title>Welcome!</ion-title>
       </ion-toolbar>
-
-      <button ion-fab id="last">Last measurement</button>
-
-      <button ion-button [full]="isFull" [round]="isRound" id="contact">Contact Doctor</button>
-
-      <ion-fab right bottom>
-          <button ion-fab id="clock" color="light" (click)="goToReminderPage()">
-            <ion-icon name="alarm">
-        </ion-icon></button></ion-fab>
+  
+  
+    <ion-item>
+      <h2> {{ user.username +"      " + user.name}} </h2>
+    </ion-item>
+   -->
              
+   
+
+   <ion-segment >
+      <ion-segment-button (click)="viewPressure()">
+        <ion-label>BloodPressure</ion-label>
+      </ion-segment-button>
+      <ion-segment-button (click)="viewGlucose()">
+        <ion-label>BloodGlucose</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+<ion-card>
+  <ion-list>
+    <ion-item *ngFor="let data of datas" >
+        
+       <h2>BloodPressure: {{ data.Record }}</h2>
+       <h4>Time: {{ data.Time }}</h4>
+    
+    </ion-item>
+ </ion-list></ion-card>
+        
+ <ion-fab bottom right >
+    <button ion-fab>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-fab-list side="left">
+      <button ion-fab (click)="newUser()"><ion-icon name="add"></ion-icon></button>
+      <button ion-fab (click)="showPromptAlert()"><ion-icon name="key"></ion-icon></button>
+    </ion-fab-list>
+    
+  </ion-fab>
 </ion-content>
