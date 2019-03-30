@@ -15,7 +15,8 @@ export class HomePage {
   currentuser={
     username:'Not selected'
   };
-  pressureRecords = [];
+  systolicRecords = [];
+  diastolicRecords = [];
   glucoseRecords = [];
   pressureTimes = [];
   glucoseTimes = [];
@@ -145,10 +146,16 @@ export class HomePage {
   {
     
     this.datas=[];
-    this.firebase.list('/users/'+this.currentuser.username+'/bloodpressure/record').valueChanges().subscribe(
+    this.firebase.list('/users/'+this.currentuser.username+'/bloodpressure/record/systolic').valueChanges().subscribe(
       _data =>
       {
-        this.pressureRecords=_data;
+        this.systolicRecords=_data;
+      }
+    )
+    this.firebase.list('/users/'+this.currentuser.username+'/bloodpressure/record/diastolic').valueChanges().subscribe(
+      _data =>
+      {
+        this.diastolicRecords=_data;
       }
     )
     this.firebase.list('/users/'+this.currentuser.username+'/bloodpressure/time').valueChanges().subscribe(
@@ -158,11 +165,11 @@ export class HomePage {
       }
     )
     
-    for(var i=0;i<this.pressureRecords.length;i++)
+    for(var i=0;i<this.systolicRecords.length;i++)
     {
       console.log(this.datas.length);
       this.datas[i]={
-        Record:this.pressureRecords[i],
+        Record:this.systolicRecords[i],
         Time:this.pressureTimes[i]
       };
     }
