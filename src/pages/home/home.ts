@@ -136,16 +136,16 @@ export class HomePage {
     toast.present();
   }
 
-  openFromCode()
-  {
-    this.selectComponent.open();
-    
-  }
+  // openFromCode()
+  // {
+  //   this.selectComponent.open();
+  // }
 
   viewPressure()
   {
     
     this.datas=[];
+    
     this.firebase.list('/users/'+this.currentuser.username+'/bloodpressure/record/systolic').valueChanges().subscribe(
       _data =>
       {
@@ -181,6 +181,7 @@ export class HomePage {
   {
     console.log("hi");
     this.datas=[];
+   
     this.firebase.list('/users/'+this.currentuser.username+'/bloodglucose/record').valueChanges().subscribe(
       _data =>
       {
